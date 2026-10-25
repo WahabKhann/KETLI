@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/png" href="/favicon-brand.png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#0D0D0C" />
+    <!-- Preload the homepage hero (its LCP image) — only on the homepage. -->
+    <script>
+      if (location.pathname === '/') {
+        var hero = document.createElement('link');
+        hero.rel = 'preload';
+        hero.as = 'image';
+        hero.type = 'image/webp';
+        hero.href = '/images/kettli/rooftop-sign.webp';
+        hero.setAttribute('imagesrcset', '/images/kettli/rooftop-sign-800.webp 800w, /images/kettli/rooftop-sign.webp 1170w');
+        hero.setAttribute('imagesizes', '100vw');
+        hero.setAttribute('fetchpriority', 'high');
+        document.head.appendChild(hero);
+      }
+    </script>
+
+    <title>Kettli — Restaurant &amp; Café in F-10, Islamabad</title>
+    <meta
+      name="description"
+      content="Kettli is a cozy late-night restaurant and café in F-10/4, Islamabad — good food, better tea, and a place for friends and couples to linger. Dine-in, takeout and Foodpanda ordering."
+    />
+    <meta name="keywords" content="Kettli Islamabad, Kettli F-10, restaurant F-10 Islamabad, cafe F-10 Islamabad, late night restaurant Islamabad, restaurants in Islamabad" />
+    <meta name="robots" content="index, follow" />
+    <link rel="canonical" href="https://kettli.pk/" />
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Kettli" />
+    <meta property="og:title" content="Kettli — Restaurant &amp; Café in F-10, Islamabad" />
+    <meta
+      property="og:description"
+      content="Good food, better tea. Kettli is Islamabad's late-night spot for friends, couples and slow conversations."
+    />
+    <meta property="og:image" content="/og-image.jpg" />
+    <meta property="og:url" content="https://kettli.pk/" />
+    <meta property="og:locale" content="en_PK" />
+
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Kettli — Restaurant &amp; Café in F-10, Islamabad" />
+    <meta name="twitter:description" content="Good food, better tea. Islamabad's late-night spot for friends, couples and slow conversations." />
+    <meta name="twitter:image" content="/og-image.jpg" />
+
+    <!-- Headings: Kugile (licensed files pending — see src/index.css) with
+         Bricolage Grotesque as the stand-in; body/UI: Manrope. The stylesheet
+         is preloaded and applied without blocking first paint. -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="preload"
+      as="style"
+      href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,600&family=Manrope:wght@400;500;600;700&display=swap"
+      onload="this.onload=null;this.rel='stylesheet'"
+    />
+    <noscript>
+      <link
+        rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,600&family=Manrope:wght@400;500;600;700&display=swap"
+      />
+    </noscript>
+  </head>
+  <body class="antialiased">
+    <div id="root"></div>
+    <script type="module" src="/src/main.jsx"></script>
+  </body>
+</html>

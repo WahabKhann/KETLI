@@ -1,0 +1,300 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/*
+ * Kugile (brand display face). The licensed .woff2 files are not in the repo
+ * yet, so headings use Bricolage Grotesque (Google Fonts) meanwhile. When the
+ * files arrive, drop them in /public/fonts, uncomment this block and add a
+ * <link rel="preload"> for the regular weight in index.html.
+ *
+ * @font-face {
+ *   font-family: 'Kugile';
+ *   src: url('/fonts/kugile-regular.woff2') format('woff2');
+ *   font-weight: 400;
+ *   font-style: normal;
+ *   font-display: swap;
+ * }
+ */
+
+@layer base {
+  /* Design tokens. Colours are RGB channels so Tailwind can add opacity. */
+  :root {
+    --bg: 13 13 12; /* #0D0D0C */
+    --surface-1: 20 20 19; /* #141413 */
+    --surface-2: 27 27 25; /* #1B1B19 */
+    --border: 255 211 0; /* used at low opacity for hairlines */
+    --text: 255 255 255;
+    --text-muted: 185 180 168; /* #B9B4A8 — 8.3:1+ on every dark surface */
+    --accent: 255 211 0; /* #FFD300 Kettli gold */
+    --accent-deep: 245 184 0; /* #F5B800 gradient end */
+    --accent-ink: 13 13 12; /* text on gold buttons */
+    --ink: 26 26 24; /* #1A1A18 text on gold — 9.7:1+ */
+    --ink-muted: 61 51 0; /* #3D3300 secondary text on gold — 7:1+ */
+
+    --radius-card: 1.25rem;
+    --radius-media: 1rem;
+
+    --shadow-card: inset 0 1px 0 rgb(255 255 255 / 0.06), 0 1px 2px rgb(0 0 0 / 0.3),
+      0 8px 16px -4px rgb(0 0 0 / 0.25), 0 24px 48px -12px rgb(0 0 0 / 0.35);
+    --shadow-lift: inset 0 1px 0 rgb(255 255 255 / 0.08), 0 2px 4px rgb(0 0 0 / 0.3),
+      0 18px 32px -8px rgb(0 0 0 / 0.35), 0 40px 80px -20px rgb(0 0 0 / 0.45);
+    --shadow-glow: 0 0 0 4px rgb(var(--accent) / 0.18), 0 12px 32px -8px rgb(var(--accent) / 0.55);
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    font-family: 'Manrope', ui-sans-serif, system-ui, sans-serif;
+    background: rgb(var(--accent));
+    color: rgb(var(--ink));
+    line-height: 1.6;
+    font-feature-settings: 'kern' 1, 'liga' 1;
+  }
+
+  h1, h2, h3, h4, h5 {
+    font-family: Kugile, 'Bricolage Grotesque', sans-serif;
+    font-weight: 500;
+    letter-spacing: -0.03em;
+  }
+
+  /* Visible focus ring everywhere: gold on dark, black on gold bands. */
+  :focus-visible {
+    outline: 2px solid rgb(var(--accent));
+    outline-offset: 3px;
+    border-radius: 4px;
+  }
+  .surface-gold :focus-visible {
+    outline-color: rgb(var(--bg));
+  }
+  .surface-gold .card :focus-visible {
+    outline-color: rgb(var(--accent));
+  }
+
+  ::selection {
+    background: rgb(var(--accent));
+    color: rgb(var(--accent-ink));
+  }
+}
+
+@layer components {
+  /* Gold bands: radial gradient + faint grain so they never read as flat fills. */
+  .surface-gold {
+    background-color: rgb(var(--accent));
+    background-image:
+      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 .55 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.16'/%3E%3C/svg%3E"),
+      radial-gradient(120% 90% at 15% 0%, rgb(var(--accent)) 0%, rgb(var(--accent)) 40%, rgb(var(--accent-deep)) 100%);
+    color: rgb(var(--ink));
+  }
+
+  /* The one card style: gradient black surface, gold hairline, layered shadow. */
+  .card {
+    position: relative;
+    border-radius: var(--radius-card);
+    border: 1px solid rgb(var(--border) / 0.14);
+    background: linear-gradient(180deg, rgb(var(--surface-2)) 0%, rgb(var(--surface-1)) 100%);
+    color: rgb(var(--text));
+    box-shadow: var(--shadow-card);
+  }
+
+  /* Small uppercase label above headings. */
+  .eyebrow {
+    @apply text-caption font-semibold uppercase;
+  }
+
+  /* Buttons — see Button.jsx. */
+  .btn {
+    @apply inline-flex min-h-11 items-center justify-center gap-2 rounded-full border-2 font-semibold tracking-wide;
+    transition: transform 0.2s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.25s ease, background-color 0.25s ease,
+      color 0.25s ease, border-color 0.25s ease;
+  }
+  .btn:hover {
+    transform: translateY(-1px);
+  }
+  .btn:active {
+    transform: translateY(1px);
+  }
+  .btn-primary {
+    border-color: rgb(var(--accent-deep));
+    background: linear-gradient(180deg, #ffe14d 0%, rgb(var(--accent)) 55%, #f2c600 100%);
+    color: rgb(var(--accent-ink));
+    box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.6), 0 1px 2px rgb(0 0 0 / 0.25);
+  }
+  .btn-primary:hover {
+    box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.6), var(--shadow-glow);
+  }
+  .btn-secondary {
+    border-color: rgb(var(--accent));
+    color: rgb(var(--accent));
+  }
+  .btn-secondary:hover {
+    background-color: rgb(255 255 255 / 0.08);
+    backdrop-filter: blur(8px);
+    box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.12), 0 0 0 4px rgb(var(--accent) / 0.12);
+  }
+  .btn-dark {
+    border-color: rgb(var(--bg));
+    background: linear-gradient(180deg, #2b2b28 0%, rgb(var(--bg)) 100%);
+    color: rgb(var(--accent));
+    box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.14), 0 1px 2px rgb(0 0 0 / 0.3);
+  }
+  .btn-dark:hover {
+    box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.14), 0 0 0 4px rgb(var(--bg) / 0.12),
+      0 14px 28px -10px rgb(0 0 0 / 0.6);
+  }
+  .btn-ghost {
+    border-color: rgb(var(--ink));
+    color: rgb(var(--ink));
+  }
+  .btn-ghost:hover {
+    background-color: rgb(255 255 255 / 0.3);
+    backdrop-filter: blur(8px);
+    box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.5), 0 0 0 4px rgb(var(--bg) / 0.08);
+  }
+
+  /* 3D tilt + cursor glare (useTilt sets --rx/--ry/--gx/--gy/--go). */
+  .tilt {
+    transform: perspective(900px) rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg));
+    transition: transform 0.25s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.3s ease;
+    will-change: transform;
+  }
+  .tilt.is-tilting {
+    transition: transform 0.08s linear, box-shadow 0.3s ease;
+    box-shadow: var(--shadow-lift);
+  }
+  .tilt-glare {
+    pointer-events: none;
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    background: radial-gradient(
+      420px circle at var(--gx, 50%) var(--gy, 0%),
+      rgb(255 255 255 / 0.12),
+      rgb(var(--accent) / 0.05) 35%,
+      transparent 65%
+    );
+    opacity: var(--go, 0);
+    transition: opacity 0.3s ease;
+  }
+
+  /* Coverflow gallery (PhotoStrip): grab cursor, no snapping mid-drag. */
+  .coverflow {
+    cursor: grab;
+  }
+  .coverflow.is-dragging {
+    cursor: grabbing;
+    scroll-snap-type: none;
+    scroll-behavior: auto;
+  }
+
+  /* Hero title: layered shadow + soft gold glow for depth. */
+  .title-glow {
+    text-shadow: 0 1px 0 rgb(255 255 255 / 0.25), 0 3px 0 rgb(0 0 0 / 0.25), 0 10px 28px rgb(0 0 0 / 0.6),
+      0 0 70px rgb(var(--accent) / 0.28);
+  }
+
+  /* Scroll reveal (RevealOnScroll). */
+  .reveal {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1), transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  .reveal.is-visible {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* Leaflet map, styled black and gold. */
+.kettli-pin span {
+  position: relative;
+  display: block;
+  width: 34px;
+  height: 34px;
+  border: 3px solid rgb(var(--bg));
+  border-radius: 50% 50% 50% 0;
+  background: rgb(var(--accent));
+  transform: rotate(-45deg);
+  box-shadow: 0 6px 16px rgb(0 0 0 / 0.45);
+}
+.kettli-pin span::after {
+  content: '';
+  position: absolute;
+  inset: 8px;
+  border-radius: 50%;
+  background: rgb(var(--bg));
+}
+/* Selectors are doubled up (.leaflet-container …) to beat leaflet.css,
+   which loads later with the lazy map chunk. */
+.leaflet-container.leaflet-container {
+  font-family: 'Manrope', ui-sans-serif, system-ui, sans-serif;
+  background: rgb(var(--surface-1));
+}
+.leaflet-container .leaflet-tile-pane {
+  filter: invert(1) hue-rotate(180deg) brightness(0.9) contrast(0.9) saturate(0.6);
+}
+.leaflet-container .leaflet-popup-content-wrapper,
+.leaflet-container .leaflet-popup-tip {
+  background: rgb(var(--surface-1));
+  color: rgb(var(--text));
+  box-shadow: 0 10px 30px rgb(0 0 0 / 0.4);
+}
+.leaflet-container .leaflet-popup-content strong {
+  color: rgb(var(--accent));
+}
+.leaflet-container .leaflet-popup-close-button {
+  color: rgb(var(--text-muted));
+}
+.leaflet-container .leaflet-bar a {
+  background: rgb(var(--surface-1));
+  color: rgb(var(--accent));
+  border-bottom-color: rgb(var(--border) / 0.2);
+}
+.leaflet-container .leaflet-bar a:hover {
+  background: rgb(var(--accent));
+  color: rgb(var(--accent-ink));
+}
+.leaflet-container .leaflet-control-attribution {
+  background: rgb(var(--bg) / 0.8);
+  color: rgb(var(--text-muted));
+}
+.leaflet-container .leaflet-control-attribution a {
+  color: rgb(var(--accent));
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+
+  /* Dotted leader between a menu item and its price. */
+  .menu-leader {
+    flex: 1 1 auto;
+    min-width: 1rem;
+    border-bottom: 1px dotted rgb(var(--accent) / 0.22);
+    transform: translateY(-0.3em);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+  .reveal {
+    opacity: 1;
+    transform: none;
+  }
+  .tilt {
+    transform: none;
+  }
+}
